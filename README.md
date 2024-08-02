@@ -1,40 +1,75 @@
 # Hello World
 
-This Solidity program is a simple "Hello World" program that demonstrates the basic syntax and functionality of the Solidity programming language. The purpose of this program is to serve as a starting point for those who are new to Solidity and want to get a feel for how it works.
+vikramToken This Solidity program is an ERC-20 token contract named "VikramiToken". It demonstrates the basic functionality of the ERC-20 token standard, including minting, transferring, and burning tokens. This program is designed for those who are new to Solidity and ERC-20 token development on the Ethereum blockchain.
+
 
 ## Description
 
-This program is a simple contract written in Solidity, a programming language used for developing smart contracts on the Ethereum blockchain. The contract has a single function that returns the string "Hello World!". This program serves as a simple and straightforward introduction to Solidity programming, and can be used as a stepping stone for more complex projects in the future.
+The VikramToken contract is a smart contract written in Solidity for the Ethereum blockchain. It implements an ERC-20 token with the following features:
+
+Minting Tokens: Upon deployment, 100 SR tokens are minted to the contract's address. Token Transfer: The admin can transfer tokens from the contract's address to a recipient. Token Burning: Any user can burn their tokens, reducing the total supply. This contract demonstrates the use of OpenZeppelin's ERC-20 implementation, providing a secure and standard way to create tokens. It can serve as a foundation for more complex projects.
 
 ## Getting Started
 
 ### Executing program
 
-To run this program, you can use Remix, an online Solidity IDE. To get started, go to the Remix website at https://remix.ethereum.org/.
+To run this program, you will need to use Remix, an online Solidity IDE. Follow these steps to get started:
 
-Once you are on the Remix website, create a new file by clicking on the "+" icon in the left-hand sidebar. Save the file with a .sol extension (e.g., HelloWorld.sol). Copy and paste the following code into the file:
+Visit Remix: Go to https://remix.ethereum.org/. Create a New File: Click on the "+" icon in the left-hand sidebar to create a new file. Save the File: Save the file with a .sol extension (e.g., SrishtiToken.sol). Copy and Paste Code: Copy and paste the following code into the new file:
 
 ```javascript
-pragma solidity ^0.8.4;
+pragma solidity ^0.8.0;
+// SPDX-License-Identifier: MIT
 
-contract HelloWorld {
-    function sayHello() public pure returns (string memory) {
-        return "Hello World!";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+contract SrishtiToken is ERC20 {
+    address admin;
+
+    constructor() ERC20("Srishti", "SR") {
+        admin = msg.sender;
+        _mint(address(this), 100 * 10 ** decimals());
+    }
+
+    modifier onlyAdmin() {
+        require(msg.sender == admin, "This does not belong to the Owner");
+        _;
+    }
+
+    function createTokens(address recipient, uint256 quantity) public onlyAdmin {
+        uint balance = balanceOf(address(this));
+        require(balance >= quantity, "Not sufficient balance");
+        _transfer(address(this), recipient, quantity);
+    }
+
+    function destroyTokens(uint256 amount) public {
+        _burn(msg.sender, amount);
+    }
+
+    function transferTokens(address recipient, uint256 amount) public returns (bool) {
+        _transfer(msg.sender, recipient, amount);
+        return true;
     }
 }
 
+
+
 ```
 
-To compile the code, click on the "Solidity Compiler" tab in the left-hand sidebar. Make sure the "Compiler" option is set to "0.8.4" (or another compatible version), and then click on the "Compile HelloWorld.sol" button.
+To run the program, follow these steps:
 
-Once the code is compiled, you can deploy the contract by clicking on the "Deploy & Run Transactions" tab in the left-hand sidebar. Select the "HelloWorld" contract from the dropdown menu, and then click on the "Deploy" button.
+Compile the Code:
 
-Once the contract is deployed, you can interact with it by calling the sayHello function. Click on the "HelloWorld" contract in the left-hand sidebar, and then click on the "sayHello" function. Finally, click on the "transact" button to execute the function and retrieve the "Hello World!" message.
+Click on the "Solidity Compiler" tab in the left-hand sidebar. Ensure the "Compiler" option is set to a compatible version, such as "0.8.0". Click on the "Compile SrishtiToken.sol" button. Deploy the Contract:
+
+Click on the "Deploy & Run Transactions" tab in the left-hand sidebar. Select the "SrishtiToken" contract from the dropdown menu. Click on the "Deploy" button. Interact with the Contract:
+
+Minting Tokens: Upon deployment, 100 SR tokens are minted to the contract address. Creating Tokens: Call the createTokens function with the recipient address and quantity to transfer tokens from the contract address to the recipient. This can only be done by the admin. Destroying Tokens: Call the destroyTokens function with the amount to burn tokens from the caller's address.
 
 ## Authors
 
-Metacrafter Chris  
-[@metacraftersio](https://twitter.com/metacraftersio)
+Vikram Garg
+Gmail : vikramgarg979@gmail.com
 
 
 ## License
