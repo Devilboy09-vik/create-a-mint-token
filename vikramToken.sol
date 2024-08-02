@@ -3,10 +3,10 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract SrishtiToken is ERC20 {
+contract VikramToken is ERC20 {
     address admin;
 
-    constructor() ERC20("Srishti", "SR") {
+    constructor() ERC20("Vikram", "SR") {
         admin = msg.sender;
         _mint(address(this), 100 * 10 ** decimals());
     }
